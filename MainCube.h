@@ -62,10 +62,6 @@ private:
     bool bIsMovingSameSpeed;
     bool bMovementForcedStopped;
 
-    bool bCheckCollisionThisFrame;
-
-    float CurrentStepInterval;
-
     float fCount;
     float fVectorIncrease;
 

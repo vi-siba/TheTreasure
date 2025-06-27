@@ -1,4 +1,5 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MainCube.h"
 #include "Engine/World.h"
@@ -59,6 +60,7 @@ void AMainCube::BeginPlay()
     Super::BeginPlay();
 }
 
+
 void AMainCube::MoveInDirection()
 {
     if (Controller != nullptr && !bIsMoving && !bMovementForcedStopped)
@@ -73,6 +75,9 @@ void AMainCube::MakeMoveInDirection()
 
     if (bMovementForcedStopped)
     {
+
+
+        StopMoving();
         bIsMoving = false;
         return;
     }
@@ -99,6 +104,14 @@ void AMainCube::MakeMoveInDirection()
             HitResult,
             true
         );
+
+        if (bHit && HitResult.GetActor())
+        {
+            FString DebugMessage = FString::Printf(TEXT("Столкновение с: %s"), *HitResult.GetActor()->GetName());
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, DebugMessage);
+        }
+
+
 
         if (bHit && !ShouldIgnoreActor(HitResult.GetActor()))
         {
@@ -204,7 +217,7 @@ void AMainCube::SetLocation()
 
                 if (!bMovementForcedStopped)
                 {
-                    GetWorldTimerManager().SetTimer(TimerHandle, this, &AMainCube::MakeMoveInDirection, 0.002f, true);
+                    GetWorldTimerManager().SetTimer(TimerHandle, this, &AMainCube::MakeMoveInDirection, 0.005f, true);
                 }
                 else
                 {
@@ -233,6 +246,12 @@ void AMainCube::StopMoving()
 
 void AMainCube::ForceStopMovement()
 {
+    FString DebugMessage = FString::Printf(TEXT("Hello World"));
+
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, DebugMessage);
+
+    StopMoving();
+
     bMovementForcedStopped = true;
     bIsMoving = false;
     bIsMovingSameSpeed = false;
@@ -257,7 +276,11 @@ void AMainCube::ResetMovementStop()
 
 void AMainCube::MoveForwardStart()
 {
-    if (bMovementForcedStopped) return;
+    if (bMovementForcedStopped)
+    {
+        StopMoving();
+        return;
+    }
 
     if (!bIsMoving)
     {
@@ -275,7 +298,11 @@ void AMainCube::MoveForwardStart()
 
 void AMainCube::MoveBackwardStart()
 {
-    if (bMovementForcedStopped) return;
+    if (bMovementForcedStopped)
+    {
+        StopMoving();
+        return;
+    }
 
     if (!bIsMoving)
     {
@@ -293,7 +320,13 @@ void AMainCube::MoveBackwardStart()
 
 void AMainCube::MoveLeftStart()
 {
-    if (bMovementForcedStopped) return;
+
+
+    if (bMovementForcedStopped)
+    {
+        StopMoving();
+        return;
+    }
 
     if (!bIsMoving)
     {
@@ -311,7 +344,13 @@ void AMainCube::MoveLeftStart()
 
 void AMainCube::MoveRightStart()
 {
-    if (bMovementForcedStopped) return;
+
+
+    if (bMovementForcedStopped)
+    {
+        StopMoving();
+        return;
+    }
 
     if (!bIsMoving)
     {
